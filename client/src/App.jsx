@@ -148,7 +148,14 @@ const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replac
   };
 
   const handleEdit = (project) => {
-    setForm({ title: project.title, description: project.description, tech: project.tech, link: project.link || "" });
+    // Guardamos todos los datos incluyendo el icono actual como referencia
+    setForm({ 
+      title: project.title, 
+      description: project.description, 
+      tech: project.tech, 
+      link: project.link || "",
+      icon: project.icon // Guardamos el nombre del archivo actual para que el backend no lo pierda
+    });
     setEditingId(project.id);
     setShowProjectModal(true);
   };

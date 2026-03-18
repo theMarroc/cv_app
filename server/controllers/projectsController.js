@@ -37,13 +37,8 @@ const updateProject = (req, res) => {
         return res.status(400).json("Faltan datos requeridos (título, descripción, tech)");
     }
 
-    // Si no hay icon (ni nuevo ni viejo), tiramos error solo si es crítico, 
-    // pero aquí lo ideal es mantener el que estaba si no se envía nada.
-    let query = `
-        UPDATE projects 
-        SET title = ?, description = ?, tech = ?, link = ?
-    `;
-    let params = [title, description, tech, link];
+    let query = `UPDATE projects SET title = ?, description = ?, tech = ?, link = ?`;
+    let params = [title, description, tech, link || ""];
 
     if (icon) {
         query += `, icon = ?`;
@@ -53,15 +48,18 @@ const updateProject = (req, res) => {
     query += ` WHERE id = ?`;
     params.push(id);
 
+    console.log("Intentando UPDATE con query:", query);
+    console.log("Parámetros:", params);
+
     db.query(query, params, (err, result) => {
         if (err) {
-            console.error(err);
-            return res.status(500).json("Error al actualizar");
+            console.error("Error SQL detallado:", err);
+            return res.status(500).json("Error de base de datos: " + err.message);
         }
         if (result.affectedRows === 0) {
             return res.status(404).json("Proyecto no encontrado");
         }
-        res.json("Proyecto actualizado");
+        res.json("Proyecto actualizado correctamente");
     });
 };
 
