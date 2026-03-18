@@ -31,10 +31,28 @@ app.get("/test-db", (req, res) => {
     });
 });
 
+// Asegurar que existe la carpeta de subidas
+const fs = require("fs");
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+    console.log("Directorio de uploads creado en:", uploadsDir);
+}
+
 // uso de rutas
 app.use("/projects", projectsRoutes);
 app.use("/auth", authRoutes);
 app.use("/offers", offersRoutes);
+
+// Manejador de errores global para capturar los 500
+app.use((err, req, res, next) => {
+    console.error("ERROR GLOBAL CAPTURADO:", err);
+    res.status(500).json({
+        error: "Error interno del servidor",
+        mensaje: err.message,
+        path: req.path
+    });
+});
 
 const PORT = process.env.PORT || 3000;
 

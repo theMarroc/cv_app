@@ -9,16 +9,15 @@ exports.sendOffer = async (req, res) => {
     try {
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST || "smtp.gmail.com",
-            port: process.env.SMTP_PORT || 465,
-            secure: true, 
+            port: process.env.SMTP_PORT || 587,
+            secure: false, // true for 465, false for 587
             auth: {
                 user: process.env.SMTP_USER || "marcolionel99@gmail.com",
                 pass: process.env.SMTP_PASS || "gcgqlljtmxstphim"
             },
-            family: 4, // Forzar IPv4
-            connectionTimeout: 10000,
-            socketTimeout: 10000,
-            greetingTimeout: 10000,
+            family: 4, 
+            connectionTimeout: 15000,
+            socketTimeout: 15000,
             tls: {
                 rejectUnauthorized: false
             }
