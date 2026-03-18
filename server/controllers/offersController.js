@@ -8,16 +8,14 @@ exports.sendOffer = async (req, res) => {
 
     try {
         const transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST || "smtp.gmail.com",
-            port: process.env.SMTP_PORT || 587,
-            secure: false, // true for 465, false for 587
+            service: "gmail",
             auth: {
                 user: process.env.SMTP_USER || "marcolionel99@gmail.com",
                 pass: process.env.SMTP_PASS || "gcgqlljtmxstphim"
             },
             family: 4, 
-            connectionTimeout: 15000,
-            socketTimeout: 15000,
+            logger: true, // Ayuda a debugear si sigue fallando
+            debug: true,
             tls: {
                 rejectUnauthorized: false
             }
