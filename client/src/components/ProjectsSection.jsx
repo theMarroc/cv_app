@@ -145,7 +145,7 @@ function ProjectsSection({ projects, onDelete, onEdit, user, onNewProject }) {
         </SectionTitleWrapper>
 
         {user?.role === "admin" && (
-          <CreateBtn className="no-print" onClick={onNewProject}>+ Nuevo Proyecto</CreateBtn>
+          <CreateBtn className="no-print" onClick={onNewProject} style={{ marginBottom: '1.5rem' }}>+ Nuevo Proyecto</CreateBtn>
         )}
       </SectionHeader>
 

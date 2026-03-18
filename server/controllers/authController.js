@@ -4,72 +4,56 @@ const jwt = require("jsonwebtoken");
 
 const SECRET = process.env.JWT_SECRET || "secreto123";
 
+// Helper para queries con promesas
+const query = (sql, params) => {
+  return new Promise((resolve, reject) => {
+    db.query(sql, params, (err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    });
+  });
+};
+
 exports.register = async (req, res) => {
   const { username, password } = req.body;
-
   if (!username || !password) return res.status(400).json("Faltan datos");
 
   try {
-    // Verificar si el usuario ya existe
-    const [existingUser] = await new Promise((resolve, reject) =>
-      db.query("SELECT * FROM users WHERE username = ?", [username], (err, result) => {
-        if (err) reject(err);
-        else resolve(result);
-      })
-    );
+    const users = await query("SELECT * FROM users WHERE username = ?", [username]);
+    if (users.length > 0) return res.status(400).json("Usuario ya existe");
 
-    if (existingUser?.length > 0) return res.status(400).json("Usuario ya existe");
-
-    // Hashear contraseña
     const hashed = await bcrypt.hash(password, 10);
-
-    // Guardar usuario (role por defecto "user")
-    db.query(
-      "INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
-      [username, hashed, "user"],
-      (err, result) => {
-        if (err) return res.status(500).json(err);
-        res.status(201).json("Usuario registrado con éxito");
-      }
-    );
+    await query("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", [username, hashed, "user"]);
+    
+    res.status(201).json("Usuario registrado con éxito");
   } catch (err) {
-    console.error(err);
-    res.status(500).json("Error en el registro");
+    console.error("Error en registro:", err);
+    res.status(500).json("Error en el servidor");
   }
 };
 
-exports.login = (req, res) => {
+exports.login = async (req, res) => {
   const { username, password } = req.body;
+  if (!username || !password) return res.status(400).json("Faltan datos");
 
-  // 1. Buscar usuario
-  db.query(
-    "SELECT * FROM users WHERE username = ?",
-    [username],
-    async (err, result) => {
-      if (err) return res.status(500).json(err);
+  try {
+    const users = await query("SELECT * FROM users WHERE username = ?", [username]);
+    if (users.length === 0) return res.status(401).json("Usuario no encontrado");
 
-      if (result.length === 0) {
-        return res.status(401).json("Usuario no encontrado");
-      }
+    const user = users[0];
+    const valid = await bcrypt.compare(password, user.password);
 
-      const user = result[0];
+    if (!valid) return res.status(401).json("Contraseña incorrecta");
 
-      // 2. Comparar contraseña
-      const valid = await bcrypt.compare(password, user.password);
+    const token = jwt.sign(
+      { id: user.id, username: user.username, role: user.role },
+      SECRET,
+      { expiresIn: "24h" } // Extendemos el tiempo a 24 horas para conveniencia
+    );
 
-      if (!valid) {
-        return res.status(401).json("Contraseña incorrecta");
-      }
-
-      // 3. Crear token
-      const token = jwt.sign(
-        { id: user.id, username: user.username, role: user.role },
-        SECRET,
-        { expiresIn: "1h" }
-      );
-
-      // 4. Enviar token
-      res.json({ token });
-    }
-  );
+    res.json({ token });
+  } catch (err) {
+    console.error("Error en login:", err);
+    res.status(500).json("Error en el servidor");
+  }
 };
