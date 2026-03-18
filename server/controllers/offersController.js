@@ -7,7 +7,7 @@ exports.sendOffer = async (req, res) => {
 
     try {
         const resendApiKey = process.env.RESEND_API_KEY || "re_YNj9o8cE_FEG1Yse8bbhvAY8whVVKxKsi";
-        const contactEmail = process.env.CONTACT_EMAIL || "marcolionel99@gmail.com";
+        const contactEmail = process.env.CONTACT_EMAIL || "marcoscalzo9@gmail.com";
 
         const response = await fetch("https://api.resend.com/emails", {
             method: "POST",
