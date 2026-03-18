@@ -61,6 +61,8 @@ function RegisterForm({ onSuccess }) {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         try {
             await axios.post(`${(import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, "")}/auth/register`, form);
             setIsError(false);
