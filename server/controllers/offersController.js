@@ -8,18 +8,20 @@ exports.sendOffer = async (req, res) => {
 
     try {
         const transporter = nodemailer.createTransport({
-            service: "gmail",
+            host: process.env.SMTP_HOST || "smtp.gmail.com",
+            port: process.env.SMTP_PORT || 587,
+            secure: false, // true for 465, false for other ports
             auth: {
-                user: "marcolionel99@gmail.com",
-                pass: "gcgqlljtmxstphim"
+                user: process.env.SMTP_USER || "marcolionel99@gmail.com",
+                pass: process.env.SMTP_PASS || "gcgqlljtmxstphim"
             }
         });
 
         const mailOptions = {
             from: email,
-            to: "scalzomarco98@gmail.com",
+            to: process.env.CONTACT_EMAIL || "scalzomarco98@gmail.com",
             subject: `Nueva oferta laboral de ${name}`,
-            text: message
+            text: `Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${message}`
         };
 
         await transporter.sendMail(mailOptions);

@@ -6,7 +6,7 @@ const isAdmin = (req, res, next) => {
   if (!token) return res.status(401).json("No autorizado");
 
   try {
-    const decoded = jwt.verify(token, "secreto123");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "secreto123");
 
     if (decoded.role !== "admin") {
       return res.status(403).json("Solo admin");
