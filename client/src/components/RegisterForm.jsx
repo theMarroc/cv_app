@@ -64,7 +64,7 @@ function RegisterForm({ onSuccess }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/auth/register`, form);
+            await axios.post(`${(import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, "")}/auth/register`, form);
             if(onSuccess) onSuccess(); // Added this line based on instruction, assuming it was meant to be here
             setIsError(false);
             setMessage("Registrado con éxito. Redirigiendo...");

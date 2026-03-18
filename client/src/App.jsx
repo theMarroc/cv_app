@@ -94,7 +94,7 @@ function App() {
 
   const [form, setForm] = useState({ title: "", description: "", tech: "" });
   
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
 
   const fetchProjects = () => {
     axios.get(`${API_URL}/projects`)
