@@ -61,16 +61,15 @@ function RegisterForm({ onSuccess }) {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
         try {
             await axios.post(`${(import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, "")}/auth/register`, form);
-            if(onSuccess) onSuccess(); // Added this line based on instruction, assuming it was meant to be here
             setIsError(false);
-            setMessage("Registrado con éxito. Redirigiendo...");
+            setMessage("¡Registro exitoso! Ya puedes iniciar sesión.");
+            
+            // Esperamos 2 segundos para que el usuario vea el mensaje de éxito
             setTimeout(() => {
                 if(onSuccess) onSuccess();
-            }, 1500);
+            }, 2000);
         } catch (err) {
             setIsError(true);
             if (err.response?.data) setMessage(err.response.data);
