@@ -156,7 +156,7 @@ function ProjectsSection({ projects, onDelete, onEdit, user, onNewProject }) {
               {project.icon && (
                 <ProjectIcon>
                   {project.icon.includes('.') ? (
-                    <img src={`http://localhost:3000/uploads/${project.icon}`} alt="icono" style={{width: '20px', height: '20px', objectFit: 'contain'}} />
+                    <img src={`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/uploads/${project.icon}`} alt="icono" style={{width: '20px', height: '20px', objectFit: 'contain'}} />
                   ) : (
                     project.icon
                   )}

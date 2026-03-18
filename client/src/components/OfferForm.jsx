@@ -85,7 +85,7 @@ function OfferForm({ token }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/offers", form, {
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/offers`, form, {
         headers: { Authorization: token }
       });
       setIsError(false);

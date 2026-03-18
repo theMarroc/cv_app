@@ -62,7 +62,7 @@ function Login({ setToken }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:3000/auth/login", form)
+    axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/auth/login`, form)
       .then(res => {
         const { token } = res.data;
         localStorage.setItem("token", token);

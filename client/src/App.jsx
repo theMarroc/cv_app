@@ -94,8 +94,10 @@ function App() {
 
   const [form, setForm] = useState({ title: "", description: "", tech: "" });
   
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
   const fetchProjects = () => {
-    axios.get("http://localhost:3000/projects")
+    axios.get(`${API_URL}/projects`)
       .then(res => setProjects(res.data))
       .catch(err => console.error(err));
   };
@@ -124,16 +126,16 @@ function App() {
     }
 
     if (editingId) {
-      axios.put(`http://localhost:3000/projects/${editingId}`, formData, config)
+      axios.put(`${API_URL}/projects/${editingId}`, formData, config)
         .then(() => { fetchProjects(); setForm({ title: "", description: "", tech: "", icon: "", link: "" }); setEditingId(null); setShowProjectModal(false); });
     } else {
-      axios.post("http://localhost:3000/projects", formData, config)
+      axios.post(`${API_URL}/projects`, formData, config)
         .then(() => { fetchProjects(); setForm({ title: "", description: "", tech: "", icon: "", link: "" }); setShowProjectModal(false); });
     }
   };
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:3000/projects/${id}`, { headers: { Authorization: token } })
+    axios.delete(`${API_URL}/projects/${id}`, { headers: { Authorization: token } })
       .then(() => fetchProjects());
   };
 
