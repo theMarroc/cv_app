@@ -8,8 +8,8 @@ const createProject = (req, res) => {
     const icon = req.file ? req.file.filename : req.body.icon;
 
     // validación
-    if (!title || !description || !tech || !icon || !link) {
-        return res.status(400).json("Faltan datos");
+    if (!title || !description || !tech || !link) {
+        return res.status(400).json("Faltan datos requeridos (título, descripción, tech, link)");
     }
 
     const query = "INSERT INTO projects (title, description, tech, icon, link) VALUES (?, ?, ?, ?, ?)";
@@ -30,28 +30,37 @@ const createProject = (req, res) => {
 //Update
 const updateProject = (req, res) => {
     const { id } = req.params;
-    const { title, description, tech, link } = req.body;
-    const icon = req.file ? req.file.filename : req.body.icon;
+    const { title, description, tech, link, icon: existingIcon } = req.body;
+    const icon = req.file ? req.file.filename : existingIcon;
 
-    if (!title || !description || !tech || !icon || !link) {
-        return res.status(400).json("Faltan datos");
+    if (!title || !description || !tech || !link) {
+        return res.status(400).json("Faltan datos requeridos (título, descripción, tech, link)");
     }
 
-    const query = `
+    // Si no hay icon (ni nuevo ni viejo), tiramos error solo si es crítico, 
+    // pero aquí lo ideal es mantener el que estaba si no se envía nada.
+    let query = `
         UPDATE projects 
-        SET title = ?, description = ?, tech = ?, icon = ?, link = ?
-        WHERE id = ?
+        SET title = ?, description = ?, tech = ?, link = ?
     `;
+    let params = [title, description, tech, link];
 
-    db.query(query, [title, description, tech, icon, link, id], (err, result) => {
+    if (icon) {
+        query += `, icon = ?`;
+        params.push(icon);
+    }
+
+    query += ` WHERE id = ?`;
+    params.push(id);
+
+    db.query(query, params, (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).json("Error al actualizar");
         }
         if (result.affectedRows === 0) {
-        return res.status(404).json("Proyecto no encontrado");
-    }
-
+            return res.status(404).json("Proyecto no encontrado");
+        }
         res.json("Proyecto actualizado");
     });
 };

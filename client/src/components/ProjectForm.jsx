@@ -63,7 +63,6 @@ function ProjectForm({ form, handleChange, handleSubmit, editingId }) {
         name="icon"
         accept="image/*"
         onChange={handleChange}
-        required={!editingId}
       />
 
       <Input

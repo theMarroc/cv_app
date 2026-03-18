@@ -175,8 +175,8 @@ const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replac
           onNewProject={openNewProject}
         />
         
-        {/* Contact section for regular users - Not printed */}
-        {user?.role === "user" && (
+        {/* Contact section for regular users and admin - Not printed */}
+        {user?.role && (
           <div id="contact" className="no-print" style={{ padding: '2rem 0', marginTop: '2rem', borderTop: '2px dashed #cbd5e1' }}>
             <h3 style={{marginBottom: '1rem', color: '#0f172a', textAlign: 'center'}}>¡Puedes enviarme un correo desde aquí!</h3>
             <div style={{ maxWidth: '600px', margin: '0 auto' }}>
