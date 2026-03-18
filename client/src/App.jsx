@@ -127,10 +127,18 @@ const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replac
 
     if (editingId) {
       axios.put(`${API_URL}/projects/${editingId}`, formData, config)
-        .then(() => { fetchProjects(); setForm({ title: "", description: "", tech: "", icon: "", link: "" }); setEditingId(null); setShowProjectModal(false); });
+        .then(() => { fetchProjects(); setForm({ title: "", description: "", tech: "", icon: "", link: "" }); setEditingId(null); setShowProjectModal(false); })
+        .catch(err => {
+          console.error("Error al editar:", err.response?.data || err.message);
+          alert("Error al editar: " + (err.response?.data || err.message));
+        });
     } else {
       axios.post(`${API_URL}/projects`, formData, config)
-        .then(() => { fetchProjects(); setForm({ title: "", description: "", tech: "", icon: "", link: "" }); setShowProjectModal(false); });
+        .then(() => { fetchProjects(); setForm({ title: "", description: "", tech: "", icon: "", link: "" }); setShowProjectModal(false); })
+        .catch(err => {
+          console.error("Error al crear:", err.response?.data || err.message);
+          alert("Error al crear: " + (err.response?.data || err.message));
+        });
     }
   };
 
@@ -140,7 +148,7 @@ const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replac
   };
 
   const handleEdit = (project) => {
-    setForm({ title: project.title, description: project.description, tech: project.tech });
+    setForm({ title: project.title, description: project.description, tech: project.tech, link: project.link || "" });
     setEditingId(project.id);
     setShowProjectModal(true);
   };

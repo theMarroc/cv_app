@@ -8,8 +8,8 @@ const createProject = (req, res) => {
     const icon = req.file ? req.file.filename : req.body.icon;
 
     // validación
-    if (!title || !description || !tech || !link) {
-        return res.status(400).json("Faltan datos requeridos (título, descripción, tech, link)");
+    if (!title || !description || !tech) {
+        return res.status(400).json("Faltan datos requeridos (título, descripción, tech)");
     }
 
     const query = "INSERT INTO projects (title, description, tech, icon, link) VALUES (?, ?, ?, ?, ?)";
@@ -33,8 +33,8 @@ const updateProject = (req, res) => {
     const { title, description, tech, link, icon: existingIcon } = req.body;
     const icon = req.file ? req.file.filename : existingIcon;
 
-    if (!title || !description || !tech || !link) {
-        return res.status(400).json("Faltan datos requeridos (título, descripción, tech, link)");
+    if (!title || !description || !tech) {
+        return res.status(400).json("Faltan datos requeridos (título, descripción, tech)");
     }
 
     // Si no hay icon (ni nuevo ni viejo), tiramos error solo si es crítico, 
