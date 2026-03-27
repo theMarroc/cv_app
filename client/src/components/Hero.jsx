@@ -6,7 +6,6 @@ import marco from "../assets/marco.png"
 
 
 
-// Layout principal del Hero
 const HeroContainer = styled.section`
   display: flex;
   flex-direction: column;
@@ -15,7 +14,6 @@ const HeroContainer = styled.section`
   color: #1e293b;
 `;
 
-// Fila superior: Foto y Títulos
 const TopRow = styled.div`
   display: flex;
   align-items: center;
@@ -55,7 +53,7 @@ const JobTitle = styled.h2`
   margin: 0;
 `;
 
-// Fila de Contactos (Píldoras)
+
 const ContactRow = styled.div`
   display: flex;
   align-items: center;
@@ -93,7 +91,7 @@ const ChipIcon = styled.img`
   vertical-align: middle;
 `;
 
-// Acerca de mi
+
 const AboutSection = styled.div`
   text-align: center;
   margin-top: 1.5rem;

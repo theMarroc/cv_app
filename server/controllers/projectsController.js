@@ -1,5 +1,3 @@
-//Lógica del controlador CRUD
-
 const db = require("../config/db");
 
 //Create
@@ -87,8 +85,8 @@ const deleteProject = (req, res) => {
             return res.status(500).json("Error al eliminar");
         }
         if (result.affectedRows === 0) {
-        return res.status(404).json("Proyecto no encontrado");
-    }
+            return res.status(404).json("Proyecto no encontrado");
+        }
 
         res.json("Proyecto eliminado");
     });

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-// Misma lógica de Title Line que en Hero/Skills
 const SectionTitleWrapper = styled.div`
   display: inline-block;
   position: relative;
@@ -156,7 +155,7 @@ function ProjectsSection({ projects, onDelete, onEdit, user, onNewProject }) {
               {project.icon && (
                 <ProjectIcon>
                   {project.icon.includes('.') ? (
-                    <img src={`${(import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, "")}/uploads/${project.icon}`} alt="icono" style={{width: '20px', height: '20px', objectFit: 'contain'}} />
+                    <img src={`${(import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, "")}/uploads/${project.icon}`} alt="icono" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                   ) : (
                     project.icon
                   )}

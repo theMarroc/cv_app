@@ -24,7 +24,7 @@ exports.register = async (req, res) => {
 
     const hashed = await bcrypt.hash(password, 10);
     await query("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", [username, hashed, "user"]);
-    
+
     res.status(201).json("Usuario registrado con éxito");
   } catch (err) {
     console.error("Error en registro:", err);
@@ -48,7 +48,7 @@ exports.login = async (req, res) => {
     const token = jwt.sign(
       { id: user.id, username: user.username, role: user.role },
       SECRET,
-      { expiresIn: "24h" } // Extendemos el tiempo a 24 horas para conveniencia
+      { expiresIn: "24h" }
     );
 
     res.json({ token });

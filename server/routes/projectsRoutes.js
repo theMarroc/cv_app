@@ -1,5 +1,3 @@
-//Endpoints
-
 const isAdmin = require("../middleware/isAdmin");
 
 const express = require("express");
@@ -20,7 +18,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+  limits: { fileSize: 10 * 1024 * 1024 }
 });
 
 const { createProject, getProjects, updateProject, deleteProject } = require("../controllers/projectsController");

@@ -53,56 +53,55 @@ const Message = styled.p`
 `;
 
 function RegisterForm({ onSuccess }) {
-    const [form, setForm] = useState({ username: "", password: "" });
-    const [message, setMessage] = useState("");
-    const [isError, setIsError] = useState(false);
+  const [form, setForm] = useState({ username: "", password: "" });
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await axios.post(`${(import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, "")}/auth/register`, form);
-            setIsError(false);
-            setMessage("¡Registro exitoso! Ya puedes iniciar sesión.");
-            
-            // Esperamos 2 segundos para que el usuario vea el mensaje de éxito
-            setTimeout(() => {
-                if(onSuccess) onSuccess();
-            }, 2000);
-        } catch (err) {
-            setIsError(true);
-            if (err.response?.data) setMessage(err.response.data);
-            else setMessage("Error en el registro");
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(`${(import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, "")}/auth/register`, form);
+      setIsError(false);
+      setMessage("¡Registro exitoso! Ya puedes iniciar sesión.");
 
-    return (
-        <FormContainer>
-            <Title>Crear Cuenta</Title>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <Input
-                    name="username"
-                    placeholder="Usuario"
-                    value={form.username}
-                    onChange={handleChange}
-                    required
-                />
-                <Input
-                    name="password"
-                    type="password"
-                    placeholder="Contraseña"
-                    value={form.password}
-                    onChange={handleChange}
-                    required
-                />
-                <Button type="submit">Registrarse</Button>
-            </form>
-            {message && <Message error={isError}>{message}</Message>}
-        </FormContainer>
-    );
+      setTimeout(() => {
+        if (onSuccess) onSuccess();
+      }, 2000);
+    } catch (err) {
+      setIsError(true);
+      if (err.response?.data) setMessage(err.response.data);
+      else setMessage("Error en el registro");
+    }
+  };
+
+  return (
+    <FormContainer>
+      <Title>Crear Cuenta</Title>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <Input
+          name="username"
+          placeholder="Usuario"
+          value={form.username}
+          onChange={handleChange}
+          required
+        />
+        <Input
+          name="password"
+          type="password"
+          placeholder="Contraseña"
+          value={form.password}
+          onChange={handleChange}
+          required
+        />
+        <Button type="submit">Registrarse</Button>
+      </form>
+      {message && <Message error={isError}>{message}</Message>}
+    </FormContainer>
+  );
 }
 
 export default RegisterForm;

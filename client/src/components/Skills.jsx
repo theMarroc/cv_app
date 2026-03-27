@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-// Misma lógica de Title Line que en Hero
 const SectionTitleWrapper = styled.div`
   display: inline-block;
   position: relative;
@@ -104,7 +103,6 @@ function Skills() {
       </SectionTitleWrapper>
 
       <SkillsContainer>
-        {/* Frontend Group */}
         <TechGroup>
           <GroupLabel></GroupLabel>
           <SkillChip bg="#e0f2fe"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" />React</SkillChip>

@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { createGlobalStyle } from "styled-components";
 import styled from "styled-components";
 
-// Componentes
+
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Skills from "./components/Skills";
@@ -70,8 +70,8 @@ function App() {
   const [projects, setProjects] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
-  
-  // Modals state
+
+
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showProjectModal, setShowProjectModal] = useState(false);
@@ -93,29 +93,29 @@ function App() {
   };
 
   const [form, setForm] = useState({ title: "", description: "", tech: "" });
-  
-const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
+
+  const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
 
   const fetchProjects = () => {
     axios.get(`${API_URL}/projects`)
       .then(res => setProjects(res.data))
       .catch(err => console.error(err));
   };
-  
+
   useEffect(() => { fetchProjects(); }, []);
 
-  const handleChange = (e) => { 
+  const handleChange = (e) => {
     if (e.target.name === 'icon' && e.target.type === 'file') {
       setForm({ ...form, icon: e.target.files[0] });
     } else {
-      setForm({ ...form, [e.target.name]: e.target.value }); 
+      setForm({ ...form, [e.target.name]: e.target.value });
     }
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const config = { headers: { Authorization: token, 'Content-Type': 'multipart/form-data' } };
-    
+
     const formData = new FormData();
     formData.append("title", form.title);
     formData.append("description", form.description);
@@ -148,13 +148,13 @@ const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replac
   };
 
   const handleEdit = (project) => {
-    // Guardamos todos los datos incluyendo el icono actual como referencia
-    setForm({ 
-      title: project.title, 
-      description: project.description, 
-      tech: project.tech, 
+
+    setForm({
+      title: project.title,
+      description: project.description,
+      tech: project.tech,
       link: project.link || "",
-      icon: project.icon // Guardamos el nombre del archivo actual para que el backend no lo pierda
+      icon: project.icon
     });
     setEditingId(project.id);
     setShowProjectModal(true);
@@ -169,31 +169,31 @@ const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replac
   return (
     <>
       <GlobalStyle />
-      
+
       <div className="no-print">
-        <Header 
-          user={user} 
-          handleLogout={handleLogout} 
-          onLoginClick={() => setShowLogin(true)} 
-          onRegisterClick={() => setShowRegister(true)} 
+        <Header
+          user={user}
+          handleLogout={handleLogout}
+          onLoginClick={() => setShowLogin(true)}
+          onRegisterClick={() => setShowRegister(true)}
         />
       </div>
-      
+
       <A4Page>
         <Hero user={user} />
         <Skills />
-        <ProjectsSection 
-          projects={projects} 
-          onDelete={handleDelete} 
-          onEdit={handleEdit} 
-          user={user} 
+        <ProjectsSection
+          projects={projects}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+          user={user}
           onNewProject={openNewProject}
         />
-        
-        {/* Contact section for regular users and admin - Not printed */}
+
+
         {user?.role && (
           <div id="contact" className="no-print" style={{ padding: '2rem 0', marginTop: '2rem', borderTop: '2px dashed #cbd5e1' }}>
-            <h3 style={{marginBottom: '1rem', color: '#0f172a', textAlign: 'center'}}>¡Puedes enviarme un correo desde aquí!</h3>
+            <h3 style={{ marginBottom: '1rem', color: '#0f172a', textAlign: 'center' }}>¡Puedes enviarme un correo desde aquí!</h3>
             <div style={{ maxWidth: '600px', margin: '0 auto' }}>
               <OfferForm token={token} />
             </div>
@@ -201,12 +201,12 @@ const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replac
         )}
       </A4Page>
 
-      {/* Auth Modals - Hidden on print by default since they only load on click */}
+
       {showLogin && (
         <Modal onClose={() => setShowLogin(false)}>
           <Login setToken={(t) => { setToken(t); setShowLogin(false); }} />
-          <p style={{marginTop: '1rem', textAlign: 'center'}}>
-            ¿No tienes cuenta? <a href="#" style={{color: '#38bdf8'}} onClick={(e) => { e.preventDefault(); setShowLogin(false); setShowRegister(true); }}>Regístrate</a>
+          <p style={{ marginTop: '1rem', textAlign: 'center' }}>
+            ¿No tienes cuenta? <a href="#" style={{ color: '#38bdf8' }} onClick={(e) => { e.preventDefault(); setShowLogin(false); setShowRegister(true); }}>Regístrate</a>
           </p>
         </Modal>
       )}
@@ -214,13 +214,13 @@ const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replac
       {showRegister && (
         <Modal onClose={() => setShowRegister(false)}>
           <RegisterForm onSuccess={() => { setShowRegister(false); setShowLogin(true); }} />
-          <p style={{marginTop: '1rem', textAlign: 'center'}}>
-            ¿Ya tienes cuenta? <a href="#" style={{color: '#38bdf8'}} onClick={(e) => { e.preventDefault(); setShowRegister(false); setShowLogin(true); }}>Inicia sesión</a>
+          <p style={{ marginTop: '1rem', textAlign: 'center' }}>
+            ¿Ya tienes cuenta? <a href="#" style={{ color: '#38bdf8' }} onClick={(e) => { e.preventDefault(); setShowRegister(false); setShowLogin(true); }}>Inicia sesión</a>
           </p>
         </Modal>
       )}
 
-      {/* Admin Project Form Modal */}
+
       {showProjectModal && (
         <Modal onClose={() => setShowProjectModal(false)}>
           <h2 style={{ marginBottom: '1.5rem', color: '#38bdf8' }}>{editingId ? "Editar Proyecto" : "Nuevo Proyecto"}</h2>
